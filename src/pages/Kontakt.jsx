@@ -57,7 +57,6 @@ export default function Kontakt() {
   return (
     <section className="max-w-6xl mx-auto px-4 py-16">
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">Kontakt</h1>
-      <p className="text-xs opacity-60">Build: {new Date().toISOString()}</p>
       <div className="grid md:grid-cols-2 gap-10">
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
           <label className="block">

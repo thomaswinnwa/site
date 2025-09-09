@@ -16,7 +16,6 @@ export default function Home() {
           <h1 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">
             Full-Service-Werbeagentur in Obersimten bei Pirmasens
           </h1>
-          <p className="text-xs opacity-60">Build: {new Date().toISOString()}</p>
           <p className="max-w-3xl mx-auto text-lg mb-6">
             Sie gründen ein Unternehmen, möchten Ihren Markt vergrößern oder einen besonderen Anlass professionell
             kommunizieren? Wir entwickeln individuelle Kommunikations- und Marketingkonzepte – keine Standard-Produkte,
