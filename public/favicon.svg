@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 930 749.66">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Unbenannter_Verlauf_2);
+      }
+
+      .cls-2 {
+        fill: url(#Unbenannter_Verlauf_4);
+      }
+
+      .cls-3 {
+        fill: url(#Unbenannter_Verlauf_3);
+      }
+
+      .cls-4 {
+        fill: url(#Unbenannter_Verlauf_7);
+      }
+
+      .cls-5 {
+        fill: url(#Unbenannter_Verlauf_5);
+      }
+
+      .cls-6 {
+        fill: #95c11f;
+      }
+    </style>
+    <linearGradient id="Unbenannter_Verlauf_7" data-name="Unbenannter Verlauf 7" x1="850.92" y1="654.53" x2="727.99" y2="725.51" gradientTransform="translate(0 750.38) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c6c7c6"/>
+      <stop offset=".15" stop-color="#f6f6f6"/>
+      <stop offset=".5" stop-color="#f6f6f6"/>
+    </linearGradient>
+    <linearGradient id="Unbenannter_Verlauf_2" data-name="Unbenannter Verlauf 2" x1="660.14" y1="279.95" x2="983.27" y2="665.04" gradientTransform="translate(0 750.38) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1a1b19"/>
+      <stop offset=".44" stop-color="#95c11f"/>
+    </linearGradient>
+    <linearGradient id="Unbenannter_Verlauf_3" data-name="Unbenannter Verlauf 3" x1="468.39" y1="364.88" x2="930" y2="364.88" gradientTransform="translate(0 750.38) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9d9e9d"/>
+      <stop offset="1" stop-color="#f6f6f6"/>
+    </linearGradient>
+    <linearGradient id="Unbenannter_Verlauf_4" data-name="Unbenannter Verlauf 4" x1="448.3" y1="103.87" x2="765.88" y2="400.02" gradientTransform="translate(0 750.38) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b3b3a"/>
+      <stop offset=".5" stop-color="#95c11f"/>
+    </linearGradient>
+    <linearGradient id="Unbenannter_Verlauf_5" data-name="Unbenannter Verlauf 5" x1="247.57" y1="465.48" x2="494.22" y2="-63.45" gradientTransform="translate(0 750.38) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d9dbdb"/>
+      <stop offset=".35" stop-color="#f6f6f6"/>
+    </linearGradient>
+  </defs>
+  <polygon class="cls-4" points="904.28 3.43 881.55 0 680.91 106.42 683.05 122.16 904.28 3.43"/>
+  <polygon class="cls-1" points="739.73 537.22 930 488.09 881.55 0 680.91 106.42 739.73 537.22"/>
+  <polygon class="cls-3" points="468.39 303.88 657.17 233.79 930 488.09 739.73 537.22 468.39 303.88"/>
+  <polygon class="cls-2" points="544.49 749.66 738.23 700.04 657.17 233.79 468.39 303.88 544.49 749.66"/>
+  <polygon class="cls-5" points="320.99 250.67 738.23 700.04 545.02 749.66 7.02 406.14 320.99 250.67"/>
+  <polygon class="cls-6" points="7.02 406.14 0 455.15 311.35 318.29 320.99 250.67 7.02 406.14"/>
+</svg>

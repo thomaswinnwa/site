@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@layer base {
+  :root {
+    --color-highlight: #94C11C;
+    --color-text: #898a8d;
+    --font-sans: "Open Sans", sans-serif;
+  }
+  html { font-family: var(--font-sans); color: var(--color-text); }
+}
