@@ -6,29 +6,47 @@ export default function Kontakt() {
   const [status, setStatus] = useState("idle"); // idle | sending | ok | error
   const [err, setErr] = useState("");
 
+  // Kontrollierte Felder
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     document.title = "Kontakt – Grafikstudio Thomas Winnwa";
     setMetaDesc("Nehmen Sie Kontakt auf: Adresse, Telefon, E-Mail – Grafikstudio Thomas Winnwa in 66957 Obersimten.");
   }, []);
 
-  async function onSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setStatus("sending");
     setErr("");
 
-    const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
-
     try {
       if (!FORMSPREE_ID) throw new Error("Formspree-ID fehlt (VITE_FORMSPREE_ID).");
+
+      const fd = new FormData();
+      fd.append("name", name);
+      fd.append("email", email);
+      fd.append("message", message);
+
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: "POST",
-        headers: { "Accept": "application/json" },
+        headers: { Accept: "application/json" },
         body: fd,
       });
-      if (!res.ok) throw new Error(`Fehler ${res.status}`);
+
+      if (!res.ok) {
+        let msg = `Fehler ${res.status}`;
+        try {
+          const j = await res.json();
+          if (j?.errors?.length) msg = j.errors.map((x) => x.message).join("; ");
+        } catch {}
+        throw new Error(msg);
+      }
+
       setStatus("ok");
-      e.currentTarget.reset();
+      // Felder leer machen – kein reset() irgendwo!
+      setName(""); setEmail(""); setMessage("");
     } catch (error) {
       console.error(error);
       setErr(error.message || "Senden fehlgeschlagen.");
@@ -39,33 +57,45 @@ export default function Kontakt() {
   return (
     <section className="max-w-6xl mx-auto px-4 py-16">
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">Kontakt</h1>
-
+      <p className="text-xs opacity-60">Build: {new Date().toISOString()}</p>
       <div className="grid md:grid-cols-2 gap-10">
-        <form className="space-y-4" onSubmit={onSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit} noValidate>
           <label className="block">
             <span className="sr-only">Ihr Name</span>
-            <input type="text" name="name" placeholder="Ihr Name" required
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#94C11C]" />
-          </label>
-          <label className="block">
-            <span className="sr-only">Ihre E-Mail</span>
-            <input type="email" name="email" placeholder="Ihre E-Mail" required
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#94C11C]" />
-          </label>
-          <label className="block">
-            <span className="sr-only">Ihre Nachricht</span>
-            <textarea rows="5" name="message" placeholder="Ihre Nachricht" required
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#94C11C]" />
+            <input
+              type="text" name="name" placeholder="Ihr Name" required
+              value={name} onChange={(e) => setName(e.target.value)}
+              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#94C11C]"
+            />
           </label>
 
-          {/* DSGVO-Hinweis knapp */}
+          <label className="block">
+            <span className="sr-only">Ihre E-Mail</span>
+            <input
+              type="email" name="email" placeholder="Ihre E-Mail" required
+              value={email} onChange={(e) => setEmail(e.target.value)}
+              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#94C11C]"
+            />
+          </label>
+
+          <label className="block">
+            <span className="sr-only">Ihre Nachricht</span>
+            <textarea
+              rows="5" name="message" placeholder="Ihre Nachricht" required
+              value={message} onChange={(e) => setMessage(e.target.value)}
+              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#94C11C]"
+            />
+          </label>
+
           <p className="text-xs opacity-80">
             Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zum Zweck der Kontaktaufnahme zu.
             Weitere Informationen: <a href="/datenschutz" className="underline hover:text-[#94C11C]">Datenschutzerklärung</a>.
           </p>
 
-          <button type="submit" disabled={status==="sending"}
-            className="w-full py-3 rounded-2xl bg-[#94C11C] text-white font-semibold shadow hover:opacity-90 disabled:opacity-60">
+          <button
+            type="submit" disabled={status==="sending"}
+            className="w-full py-3 rounded-2xl bg-[#94C11C] text-white font-semibold shadow hover:opacity-90 disabled:opacity-60"
+          >
             {status==="sending" ? "Sende …" : "Nachricht senden"}
           </button>
 
@@ -73,7 +103,8 @@ export default function Kontakt() {
           {status==="error" && <p className="text-red-700">Fehler: {err}</p>}
           {!FORMSPREE_ID && (
             <p className="text-amber-600 text-sm">
-              Hinweis: Es ist noch keine Formspree-ID gesetzt. Lege eine `.env` mit <code>VITE_FORMSPREE_ID</code> an.
+              Hinweis: Es ist noch keine Formspree-ID gesetzt. Lege lokal eine <code>.env</code> mit
+              <code>VITE_FORMSPREE_ID</code> an und trage die Variable in Vercel unter Settings → Environment Variables ein.
             </p>
           )}
         </form>
