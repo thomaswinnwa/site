@@ -59,6 +59,8 @@ export default function Kontakt() {
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">Kontakt</h1>
       <div className="grid md:grid-cols-2 gap-10">
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+          <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
+          <input type="hidden" name="_subject" value="Kontaktanfrage über thomas-winnwa.de" />
           <label className="block">
             <span className="sr-only">Ihr Name</span>
             <input
