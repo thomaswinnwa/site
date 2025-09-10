@@ -1,25 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function Kontakt() {
+  // --- SEO ---
   useEffect(() => {
     document.title = "Kontakt – Grafikstudio Thomas Winnwa";
     setMetaDesc("Fragen, Angebote oder Projektstart – melden Sie sich. Wir antworten zeitnah.");
   }, []);
 
-  // Formspree-Endpoint aus Vite-Env (Vercel: Project → Settings → Environment Variables)
-  // Beispiel: VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxabcd
-  const action = import.meta.env.VITE_FORMSPREE_ENDPOINT;
+  // --- ENV / Debug ---
+  const action = import.meta.env.VITE_FORMSPREE_ENDPOINT; // z. B. https://formspree.io/f/xxxxabcd
+  const MODE = import.meta.env.MODE;
+  const DEBUG_SHOW = false; // <- bei Bedarf temporär auf true setzen
+  const masked = action ? action.replace(/^(.{24}).*$/, "$1…") : "(leer)";
+  if (DEBUG_SHOW) {
+    console.log("[Kontakt] MODE:", MODE);
+    console.log("[Kontakt] VITE_FORMSPREE_ENDPOINT vorhanden:", Boolean(action));
+    console.log("[Kontakt] Endpoint (masked):", masked);
+  }
 
-  // --- DEBUG (temporär) ---
-console.log("[Kontakt] MODE:", import.meta.env.MODE);
-console.log("[Kontakt] VITE_FORMSPREE_ENDPOINT vorhanden:", Boolean(action));
-const masked = action ? action.replace(/^(.{24}).*$/, "$1…") : "(leer)";
-console.log("[Kontakt] Endpoint (masked):", masked);
-
-// Sichtbarer Build-Marker (Datum/Zeit) – bitte Zeitstempel anpassen:
-const BUILD_MARKER = "BUILD 2025-09-10 17:25";
-// --- /DEBUG ---
-
+  // --- Refs / State ---
   const formRef = useRef(null);
   const successRef = useRef(null);
   const errorRef = useRef(null);
@@ -32,9 +31,10 @@ const BUILD_MARKER = "BUILD 2025-09-10 17:25";
     name: "",
     email: "",
     message: "",
-    company: "", // Honeypot (soll leer bleiben)
+    company: "", // Honeypot (unsichtbar, muss leer bleiben)
   });
 
+  // --- Helpers ---
   function setMetaDesc(content) {
     let m = document.querySelector('meta[name="description"]');
     if (!m) { m = document.createElement("meta"); m.name = "description"; document.head.appendChild(m); }
@@ -67,46 +67,49 @@ const BUILD_MARKER = "BUILD 2025-09-10 17:25";
     if (Object.keys(es).length) {
       setErrors(es);
       // Fokus auf erstes fehlerhaftes Feld
-      const order = ["name", "email", "message"];
-      for (const key of order) {
+      for (const key of ["name", "email", "message"]) {
         if (es[key]) {
           const el = formRef.current?.querySelector(`#${key}`);
           if (el) { el.focus(); firstInvalidRef.current = el; }
           break;
         }
       }
-      // Live-Region informieren
-      if (errorRef.current) errorRef.current.focus();
+      errorRef.current?.focus();
       return;
     }
 
     if (!action) {
       setErrors({ form: "Formular ist serverseitig noch nicht konfiguriert (VITE_FORMSPREE_ENDPOINT fehlt)." });
-      if (errorRef.current) errorRef.current.focus();
+      errorRef.current?.focus();
       return;
     }
 
     try {
       setSubmitting(true);
       const res = await fetch(action, {
-  method: "POST",
-  headers: { "Accept": "application/json", "Content-Type": "application/json" },
-  body: JSON.stringify({ name: values.name, email: values.email, message: values.message }),
-});
-if (!res.ok) {
-  const txt = await res.text().catch(() => "");
-  console.error("[Kontakt] Formspree error:", res.status, txt);
-  throw new Error(`Formspree ${res.status}`);
-}
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          message: values.message,
+        }),
+      });
 
-      // Formular zurücksetzen – über Ref, nicht currentTarget
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        if (DEBUG_SHOW) console.error("[Kontakt] Formspree error:", res.status, txt);
+        throw new Error(`Formspree ${res.status}`);
+      }
+
+      // Sicheres Reset über Ref (kein currentTarget)
       formRef.current?.reset();
       setValues({ name: "", email: "", message: "", company: "" });
       setSent(true);
-      if (successRef.current) successRef.current.focus();
+      successRef.current?.focus();
     } catch (err) {
       setErrors({ form: "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut." });
-      if (errorRef.current) errorRef.current.focus();
+      errorRef.current?.focus();
     } finally {
       setSubmitting(false);
     }
@@ -118,6 +121,14 @@ if (!res.ok) {
       <p className="mb-8">
         Sie haben eine Anfrage oder möchten ein Projekt starten? Schreiben Sie uns – wir melden uns zeitnah.
       </p>
+
+      {/* Optional sichtbare Diagnose (nur wenn DEBUG_SHOW = true) */}
+      {DEBUG_SHOW && (
+        <div className="mb-4 text-xs border rounded-lg px-3 py-2 bg-amber-50 text-amber-900 border-amber-200">
+          <strong>Diagnose:</strong>{" "}
+          MODE: <b>{MODE}</b>, ENV vorhanden: <b>{String(Boolean(action))}</b>, Endpoint: <b>{masked}</b>
+        </div>
+      )}
 
       {/* Erfolgsmeldung */}
       {sent && (
@@ -144,15 +155,6 @@ if (!res.ok) {
           {errors.form || "Bitte prüfen Sie Ihre Eingaben."}
         </div>
       )}
-
-{isProd && (
-  <div className="mb-4 text-xs border rounded-lg px-3 py-2 bg-amber-50 text-amber-900 border-amber-200">
-  <strong>Diagnose:</strong>{" "}
-  MODE: <b>{import.meta.env.MODE}</b>, ENV vorhanden: <b>{String(Boolean(action))}</b>, Endpoint: <b>{masked}</b>, {BUILD_MARKER}
-</div>
-
-)}
-
 
       <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-5">
         {/* Honeypot (unsichtbar für Nutzer) */}
@@ -185,7 +187,7 @@ if (!res.ok) {
           )}
         </div>
 
-        {/* Email */}
+        {/* E-Mail */}
         <div>
           <label htmlFor="email" className="block font-semibold text-gray-900">
             E-Mail <span className="sr-only">(Pflichtfeld)</span>
@@ -210,7 +212,7 @@ if (!res.ok) {
           )}
         </div>
 
-        {/* Message */}
+        {/* Nachricht */}
         <div>
           <label htmlFor="message" className="block font-semibold text-gray-900">
             Ihre Nachricht <span className="sr-only">(Pflichtfeld)</span>
