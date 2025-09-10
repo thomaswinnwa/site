@@ -10,6 +10,17 @@ export default function Kontakt() {
   // Beispiel: VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxabcd
   const action = import.meta.env.VITE_FORMSPREE_ENDPOINT;
 
+  // --- LIVE DEBUG (temporär) ---
+const isProd = import.meta.env.MODE === "production";
+const masked = action ? action.replace(/^(.{24}).*$/, "$1…") : "(leer)";
+if (isProd) {
+  console.log("[Kontakt] MODE=production");
+  console.log("[Kontakt] VITE_FORMSPREE_ENDPOINT vorhanden:", Boolean(action));
+  console.log("[Kontakt] Endpoint (masked):", masked);
+}
+// --- /LIVE DEBUG ---
+
+
   const formRef = useRef(null);
   const successRef = useRef(null);
   const errorRef = useRef(null);
