@@ -10,16 +10,15 @@ export default function Kontakt() {
   // Beispiel: VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxabcd
   const action = import.meta.env.VITE_FORMSPREE_ENDPOINT;
 
-  // --- LIVE DEBUG (temporär) ---
-const isProd = import.meta.env.MODE === "production";
+  // --- DEBUG (temporär) ---
+console.log("[Kontakt] MODE:", import.meta.env.MODE);
+console.log("[Kontakt] VITE_FORMSPREE_ENDPOINT vorhanden:", Boolean(action));
 const masked = action ? action.replace(/^(.{24}).*$/, "$1…") : "(leer)";
-if (isProd) {
-  console.log("[Kontakt] MODE=production");
-  console.log("[Kontakt] VITE_FORMSPREE_ENDPOINT vorhanden:", Boolean(action));
-  console.log("[Kontakt] Endpoint (masked):", masked);
-}
-// --- /LIVE DEBUG ---
+console.log("[Kontakt] Endpoint (masked):", masked);
 
+// Sichtbarer Build-Marker (Datum/Zeit) – bitte Zeitstempel anpassen:
+const BUILD_MARKER = "BUILD 2025-09-10 17:25";
+// --- /DEBUG ---
 
   const formRef = useRef(null);
   const successRef = useRef(null);
@@ -90,12 +89,15 @@ if (isProd) {
     try {
       setSubmitting(true);
       const res = await fetch(action, {
-        method: "POST",
-        headers: { "Accept": "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({ name: values.name, email: values.email, message: values.message }),
-      });
-
-      if (!res.ok) throw new Error("Übermittlung fehlgeschlagen");
+  method: "POST",
+  headers: { "Accept": "application/json", "Content-Type": "application/json" },
+  body: JSON.stringify({ name: values.name, email: values.email, message: values.message }),
+});
+if (!res.ok) {
+  const txt = await res.text().catch(() => "");
+  console.error("[Kontakt] Formspree error:", res.status, txt);
+  throw new Error(`Formspree ${res.status}`);
+}
 
       // Formular zurücksetzen – über Ref, nicht currentTarget
       formRef.current?.reset();
@@ -142,6 +144,15 @@ if (isProd) {
           {errors.form || "Bitte prüfen Sie Ihre Eingaben."}
         </div>
       )}
+
+{isProd && (
+  <div className="mb-4 text-xs border rounded-lg px-3 py-2 bg-amber-50 text-amber-900 border-amber-200">
+  <strong>Diagnose:</strong>{" "}
+  MODE: <b>{import.meta.env.MODE}</b>, ENV vorhanden: <b>{String(Boolean(action))}</b>, Endpoint: <b>{masked}</b>, {BUILD_MARKER}
+</div>
+
+)}
+
 
       <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-5">
         {/* Honeypot (unsichtbar für Nutzer) */}
