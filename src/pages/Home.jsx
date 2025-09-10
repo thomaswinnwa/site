@@ -36,39 +36,25 @@ export default function Home() {
       <section className="pb-16 pt-10 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">Grafikstudio – Thomas Winnwa</h1>
-          <p className="max-w-3xl mx-auto text-lg mb-6">
-            Full-Service-Werbeagentur in Obersimten bei Pirmasens. Wir entwickeln
-            Kommunikations- und Marketinglösungen, die zu Ihnen passen – von der Idee bis zur Umsetzung, print & digital.
-          </p>
-
-          <div className="flex items-center justify-center gap-3">
-            <Link to="/kontakt" className="inline-block px-6 py-3 rounded-2xl bg-[#94C11C] text-white font-semibold shadow hover:opacity-90">
-              Kontakt aufnehmen
-            </Link>
-            <Link to="/leistungen" className="inline-block px-6 py-3 rounded-2xl border border-gray-300 text-gray-800 font-semibold hover:border-[#94C11C] hover:text-[#94C11C]">
-              Leistungen
-            </Link>
-          </div>
         </div>
       </section>
-
-      {/* Kurz-Nutzen – ohne Seiten-Teaser */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-6">
-          <article className="p-6 bg-white rounded-2xl shadow">
-            <h2 className="text-lg font-semibold text-gray-900">Verstehen & beraten</h2>
-            <p className="mt-2">Wir lernen Ihr Unternehmen kennen und entwickeln auf dieser Basis ein maßgeschneidertes Konzept – klar, zielgerichtet und transparent.</p>
-          </article>
-          <article className="p-6 bg-white rounded-2xl shadow">
-            <h2 className="text-lg font-semibold text-gray-900">Umsetzen & begleiten</h2>
-            <p className="mt-2">Print & Digital aus einer Hand: Corporate Design, Websites, Kampagnen und laufende Pflege – je nach Bedarf und Budget.</p>
-          </article>
-          <article className="p-6 bg-white rounded-2xl shadow">
-            <h2 className="text-lg font-semibold text-gray-900">Wirksamkeit & Qualität</h2>
-            <p className="mt-2">Fokus auf Nutzen und Wirkung statt Effekthascherei. Verlässliche Abläufe, kurze Wege, saubere Ergebnisse.</p>
-          </article>
-        </div>
-      </section>
+     <section className="max-w-3xl mx-auto px-4 py-10">
+  <p className="text-lg mb-4">
+    Das Grafikstudio – Thomas Winnwa ist eine Full-Service-Werbeagentur in Obersimten bei Pirmasens.
+    Wir entwickeln Kommunikations- und Marketinglösungen, die zu Ihnen passen – klar, zielgerichtet
+    und budgetbewusst.
+  </p>
+  <p className="mb-4">
+    Sie gründen ein Unternehmen und benötigen Unterstützung bei der Vermarktung? Oder möchten Sie
+    Ihren Markt vergrößern, eine größere Zielgruppe ansprechen und Ihr Konzept auffrischen?
+    Wir beraten, konzipieren und setzen um – print & digital.
+  </p>
+  <p className="mb-2">
+    Je nach Aufgabe arbeiten wir mit einem Netzwerk aus Spezialist:innen (Marketing, PR, Text, Fotografie,
+    Druck, Web-Entwicklung, Messe & Event) zusammen. So bleiben Qualität, kurze Wege und verlässliche
+    Abläufe gewährleistet.
+  </p>
+</section>
 
       {/* Dezenter Hinweis: Ausgewählte Arbeiten (random) */}
       <section className="bg-gray-50 py-14">
