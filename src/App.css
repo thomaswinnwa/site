@@ -7,3 +7,27 @@
   }
   html { font-family: var(--font-sans); color: var(--color-text); }
 }
+
+/* Sichtbarer Tastatur-Fokus auf allen interaktiven Elementen */
+@layer base {
+  :focus-visible {
+    outline: 3px solid #5A7F10; /* kontraststärker als #94C11C */
+    outline-offset: 2px;
+  }
+
+  /* Fließtext-Links standardmäßig unterstreichen (Buttons/Icons bleiben unberührt) */
+  a[href]:not([class*="btn"]):not(.no-underline) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+/* Bewegungen respektieren (Grundlage für Schritt 5) */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

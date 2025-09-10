@@ -23,8 +23,7 @@ export default function Footer() {
       </div>
 
       {/* Footer-Inhalt */}
-      // ... dein bestehender Promo/Werbeblock oben bleibt
-
+      
 <div className="max-w-6xl mx-auto px-4 pb-8">
   <div className="grid md:grid-cols-3 gap-8">
     {/* Kontakt */}
