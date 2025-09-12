@@ -1,101 +1,198 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllPosts } from "../lib/wp.js";
-import PartnerLogos from "../components/PartnerLogos.jsx"; // vorhanden aus früherem Schritt
 
 export default function Home() {
-  const [featured, setFeatured] = useState([]);
-
   useEffect(() => {
-    document.title = "Grafikstudio – Thomas Winnwa | Full-Service-Werbeagentur Obersimten";
-    setMetaDesc("Full-Service-Werbeagentur in Obersimten bei Pirmasens: Individuelle Kommunikations- und Marketinglösungen – klar, zielgerichtet, budgetbewusst.");
+    document.title = "Grafikstudio – Thomas Winnwa | Full-Service-Werbeagentur in Obersimten";
+    setMetaDesc(
+      "Full-Service-Werbeagentur bei Pirmasens: Corporate Design, Websites & SEO, Print & Kampagnen. Klar, zielgerichtet und budgetbewusst – von der Idee bis zur Umsetzung."
+    );
   }, []);
 
-  // Zufällige Auswahl (stabil pro Mount) aus allen Referenzen/News
-  useEffect(() => {
-    (async () => {
-      try {
-        const posts = await fetchAllPosts();
-        if (!Array.isArray(posts) || posts.length === 0) return;
-        // Shuffle (Fisher-Yates) & 3 picken
-        const arr = posts.slice();
-        for (let i = arr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        setFeatured(arr.slice(0, 3));
-      } catch (e) {
-        console.warn("Konnte Beiträge nicht laden:", e);
-      }
-    })();
-  }, []);
+  // Platzhalter: Referenzen (ersetze später durch echte Thumbs und Titel)
+  const allWorks = useMemo(
+    () => [
+      { id: "w1", title: "Logo-Relaunch Mittelstand", cat: "Corporate", img: "/images/ref-2.jpg", alt: "Logo-Entwurf auf Papier" },
+      { id: "w2", title: "Website Relaunch KMU", cat: "Web", img: "/images/ref-3.jpg", alt: "Laptop mit Website-Layout" },
+      { id: "w3", title: "Broschüre Produktlinie", cat: "Print", img: "/images/ref-1.jpg", alt: "Broschüren-Layout auf Tisch" },
+      { id: "w4", title: "Plakatkampagne", cat: "Print", img: "/images/ref-4.jpg", alt: "Plakat an Wand" },
+      { id: "w5", title: "Brand-Guidelines", cat: "Corporate", img: "/images/ref-5.jpg", alt: "Design-Guidelines" },
+      { id: "w6", title: "Landingpage Kampagne", cat: "Web", img: "/images/ref-6.jpg", alt: "Landingpage am Bildschirm" },
+    ],
+    []
+  );
+
+  // 3 zufällige Arbeiten dezent auswählen
+  const featured = useMemo(() => {
+    const arr = [...allWorks];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.slice(0, 3);
+  }, [allWorks]);
 
   return (
-    <>
-      {/* Hero – fokussiert */}
-      <section className="pb-16 pt-10 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">Grafikstudio – Thomas Winnwa</h1>
+    <div>
+      {/* Hero / Intro */}
+      <section className="max-w-6xl mx-auto px-4 pt-20 md:pt-28 pb-10">
+        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
+          Grafikstudio – Thomas Winnwa
+        </h1>
+        <p className="mt-3 text-lg md:text-xl">
+          Full-Service-Werbeagentur in Obersimten bei Pirmasens.
+        </p>
+        <div className="mt-6">
+          <Link
+            to="/kontakt"
+            className="inline-flex items-center px-6 py-3 rounded-2xl bg-[#5A7F10] text-white font-semibold shadow hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#94C11C]"
+          >
+            Unverbindlich anfragen
+          </Link>
         </div>
       </section>
-     <section className="max-w-3xl mx-auto px-4 py-10">
-  <p className="text-lg mb-4">
-    Das Grafikstudio – Thomas Winnwa ist eine Full-Service-Werbeagentur in Obersimten bei Pirmasens.
-    Wir entwickeln Kommunikations- und Marketinglösungen, die zu Ihnen passen – klar, zielgerichtet
-    und budgetbewusst.
-  </p>
-  <p className="mb-4">
-    Sie gründen ein Unternehmen und benötigen Unterstützung bei der Vermarktung? Oder möchten Sie
-    Ihren Markt vergrößern, eine größere Zielgruppe ansprechen und Ihr Konzept auffrischen?
-    Wir beraten, konzipieren und setzen um – print & digital.
-  </p>
-  <p className="mb-2">
-    Je nach Aufgabe arbeiten wir mit einem Netzwerk aus Spezialist:innen (Marketing, PR, Text, Fotografie,
-    Druck, Web-Entwicklung, Messe & Event) zusammen. So bleiben Qualität, kurze Wege und verlässliche
-    Abläufe gewährleistet.
-  </p>
-</section>
 
-      {/* Dezenter Hinweis: Ausgewählte Arbeiten (random) */}
-      <section className="bg-gray-50 py-14">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-end justify-between mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Ausgewählte Arbeiten</h2>
-            <Link to="/referenzen" className="text-[#94C11C] font-semibold hover:underline">Alle ansehen →</Link>
-          </div>
+      {/* Langtext – SEO-stark, ohne Teaser-Overload */}
+      <section className="max-w-3xl mx-auto px-4 pb-12">
+        <h2 className="sr-only">Über uns</h2>
+        <p className="text-lg mb-4">
+          Wir entwickeln Kommunikations- und Marketinglösungen, die zu Ihnen passen – klar,
+          zielgerichtet und budgetbewusst. Ob Corporate Design, Website&nbsp;&amp;&nbsp;SEO oder
+          klassische Print- und Kampagnenthemen: Wir beraten, konzipieren und setzen sauber um.
+        </p>
+        <p className="mb-4">
+          Sie gründen ein Unternehmen und benötigen Unterstützung bei der Vermarktung? Oder
+          möchten Sie Ihren Markt ausbauen, eine größere Zielgruppe erreichen und Ihr Konzept
+          auffrischen? Wir sorgen für eine konsistente Markenwirkung – vom Logo bis zur Landingpage,
+          vom Flyer bis zur Kampagne.
+        </p>
+        <p className="mb-0">
+          Je nach Aufgabe arbeiten wir mit einem eingespielten Netzwerk aus Spezialist:innen
+          (Marketing, PR, Text, Fotografie, Druck, Web-Entwicklung, Messe&nbsp;&amp;&nbsp;Event) zusammen.
+          So bleiben Qualität, kurze Wege und verlässliche Abläufe gewährleistet.
+        </p>
+      </section>
 
-          <ul className="grid md:grid-cols-3 gap-8">
-            {featured.length === 0 && (
-              <li className="col-span-3 p-6 bg-white rounded-2xl shadow">Lade Beispiele …</li>
-            )}
+      {/* Ausgewählte Arbeiten (random 3) */}
+      <section className="max-w-6xl mx-auto px-4 pb-16">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+            Ausgewählte Arbeiten
+          </h2>
+          <Link to="/referenzen" className="no-underline hover:text-[#94C11C]">
+            Alle Referenzen<span className="sr-only"> ansehen</span> →
+          </Link>
+        </div>
 
-            {featured.map((c) => (
-              <li key={c.id} className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
-                {c.cover ? (
-                  <img src={c.cover} alt={c.alt || c.title} className="w-full h-40 object-cover" loading="lazy" />
-                ) : (
-                  <div className="w-full h-40 bg-gray-100" aria-hidden="true" />
-                )}
-                <div className="p-5">
-                  <h3 className="text-lg font-semibold text-gray-900">{c.title}</h3>
-                  {c.excerpt && <p className="mt-2 text-sm">{c.excerpt}</p>}
-                  <a href={c.href} target="_blank" rel="noreferrer" className="mt-4 inline-block text-[#94C11C] font-semibold hover:underline">
-                    Original ansehen →
-                  </a>
+        <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {featured.map((x) => (
+            <li key={x.id} className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+              <Link
+                to="/referenzen"
+                className="block no-underline"
+                aria-label={`Referenz ansehen: ${x.title}`}
+              >
+                <img
+                  src={x.img}
+                  alt={x.alt}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                  width="800"
+                  height="450"
+                  sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+                />
+                <div className="p-4">
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-gray-100 text-gray-800 text-xs">
+                    {x.cat}
+                  </span>
+                  <h3 className="mt-2 text-lg font-semibold text-gray-900">{x.title}</h3>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      {/* Partner-/Kundenlogos – unten vor dem Footer */}
-      <section className="py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <PartnerLogos />
-        </div>
+      {/* Partner & Kunden – dezent vor dem Footer */}
+      <section className="max-w-6xl mx-auto px-4 pb-20">
+        <h2 className="text-xl font-semibold mb-4 text-gray-900">Partner &amp; Kunden</h2>
+        <p className="mb-6">Eine Auswahl von Marken und Unternehmen, mit denen wir zusammenarbeiten.</p>
+
+        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">
+          {/* Ersetze die Pfade durch deine realen Logos (SVG/PNG) */}
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/logo-urlaubsregion-pirmasens-land.png"
+              alt="Urlaubsregion Pirmasens-Land"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/logo-wilhelm-textil.png"
+              alt="Wilhelm Textil"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/schroers-futtermittel.jpg"
+              alt="Schröers Futtermittel"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/sonnenplan.jpg"
+              alt="SonnenPlan GmbH"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/titomu-balearic-investments.jpg"
+              alt="TITOMU Balearic Investments"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/mr-safety.jpg"
+              alt="MR-Safety – Arbeitsschutz- & Berufskleidung"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+          <li className="opacity-80 hover:opacity-100 transition">
+            <img
+              src="/logos/logo-vg-pirmasens-land.png"
+              alt="Verbandsgemeinde Pirmasens-Land"
+              className="max-h-10 mx-auto"
+              loading="lazy"
+              width="200"
+              height="40"
+            />
+          </li>
+        </ul>
       </section>
-    </>
+    </div>
   );
 }
 
